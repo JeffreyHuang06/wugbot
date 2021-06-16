@@ -1,8 +1,8 @@
 import json
-from typing import Dict, List
+import codecs
 
 class WugCache:
-    wc: Dict[str, List[str]] = {}
+    wc = {}
     _json_source: str = ""
 
     @staticmethod
@@ -13,5 +13,5 @@ class WugCache:
     
     @staticmethod
     def updatecache():
-        with open(WugCache._json_source, 'r') as f:
+        with codecs.open(WugCache._json_source, encoding="utf-8", mode='r') as f:
             WugCache.wc = json.loads(f.read())
