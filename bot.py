@@ -5,6 +5,7 @@ from discord_slash import SlashCommand, SlashContext
 import random
 import json
 import os
+from src.decorators import wccmd
 
 from src.wugcache import WugCache
 
@@ -61,6 +62,7 @@ async def reload(ctx, extension: str):
 async def listwug(ctx: SlashContext):
     await ctx.send(str(WugCache.wc["wug_plurals"]))
 
+@wccmd
 @slash.slash(name="twowug", description="Here is a wag, ")
 async def twowug(ctx: SlashContext):
     wc = WugCache.wc
@@ -74,6 +76,7 @@ async def twowug(ctx: SlashContext):
         random.choice(wc["after_plural"])
     )
 
+@wccmd
 @slash.slash(name="wug", description="Here is a wug, ")
 async def wug(ctx: SlashContext):
     wc = WugCache.wc
@@ -97,20 +100,6 @@ async def wug(ctx: SlashContext):
         # TODO: afterplural eithermore options and random bool check or make it constant
         random.choice(wc["after_plural"])
     )
-
-@slash.slash(name="dbg_wug_add", description="writes the actual json file adn adds a wug")
-async def dbg_wug_add(ctx: SlashContext, wugname: str):
-
-    WugCache.wc["wug_plurals"].append(wugname)
-
-    with open("wugplurals.json", 'w') as f:
-        try:
-            f.write(json.dumps(WugCache.wc))
-            await ctx.send(f"Successfully added {wugname}")
-
-        except Exception as e:
-            await ctx.send(f"Error adding wug {wugname}\n")
-            await ctx.send(f"```\n{str(e)}\n```")
 
 if __name__ == "__main__":
     load_cogs()
