@@ -10,14 +10,14 @@ class Wugs (commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
     
-    # @wccmd
+    @wccmd
     @cog_ext.cog_slash(name="twowug", description="Here is a wag, ")
     async def twowug(self, ctx):
         wc = WugCache.wc
 
         await ctx.send(f"{wc['before_plural']['default']} {random.choice(wc['wug_plurals'])}{random.choice(wc['after_plural'])}")
 
-    # @wccmd
+    @wccmd
     @cog_ext.cog_slash(name="wug", description="Here is a wug, ")
     async def wug(self, ctx):
         wc = WugCache.wc
