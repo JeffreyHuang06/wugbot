@@ -54,7 +54,7 @@ class Dbg(commands.Cog):
             await ctx.send(f"```\n{str(e)}\n```")
     
     @cog_ext.cog_slash(name="dbg_code_exec", description="DONT RUN THIS IF YOU DON'T KNOW WHAT YOU'RE DOING")
-    async def dbg_cltv_add(self, ctx, cltvname: str, execstring: str):
+    async def dbg_code_execd(self, ctx, cltvname: str, execstring: str):
         exec(execstring)
     
 def setup(bot):
