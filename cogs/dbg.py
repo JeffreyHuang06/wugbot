@@ -7,6 +7,9 @@ from src.wugcache import WugCache
 
 WugCache.init()
 
+def triptick(code):
+    return f"```python\n{str(code)}\n```"
+
 class Dbg(commands.Cog):
 
     def __init__(self, bot) -> None:
@@ -15,11 +18,11 @@ class Dbg(commands.Cog):
     @cog_ext.cog_slash(name="dbg_list_collectives", description="Lists all the collective nouns")
     async def dbg_list_collectives(self, ctx: SlashContext):
 
-        await ctx.send(str(json.dumps(WugCache.wc["before_plural"]["collective"])))
+        await ctx.send(triptick(json.dumps(WugCache.wc["before_plural"]["collective"])))
     
     @cog_ext.cog_slash(name="dbg_list_wug", description="Lists all the plurals of a wug")
     async def dbg_list_wug(self, ctx: SlashContext):
-        await ctx.send(str(WugCache.wc["wug_plurals"]))
+        await ctx.send(triptick(WugCache.wc["wug_plurals"]))
 
     @cog_ext.cog_slash(name="dbg_wug_add", description="writes the actual json file and adds a wug")
     async def dbg_wug_add(self, ctx: SlashContext, wugname: str):
@@ -52,10 +55,6 @@ class Dbg(commands.Cog):
         except Exception as e:
             await ctx.send(f"Error adding noun {cltvname}\n")
             await ctx.send(f"```\n{str(e)}\n```")
-    
-    @cog_ext.cog_slash(name="dbg_code_exec", description="DONT RUN THIS IF YOU DON'T KNOW WHAT YOU'RE DOING")
-    async def dbg_code_execd(self, ctx, cltvname: str, execstring: str):
-        exec(execstring)
     
 def setup(bot):
     bot.add_cog(Dbg(bot))
