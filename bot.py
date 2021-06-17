@@ -6,12 +6,15 @@ import random
 import json
 import os
 
-from wugcache import WugCache
+from src.wugcache import WugCache
 
 WugCache.init()
 
 def get_bot_key() -> str:
-    return os.environ.get("DISCORD_KEY")
+    # return os.environ.get("DISCORD_KEY")
+
+    with open("api.key", "r") as f:
+        return f.read().rstrip("\n")
 
 def space(lis: List[str]):
     accum: str = ""
@@ -25,15 +28,37 @@ def space(lis: List[str]):
 bot = commands.Bot(command_prefix="!")
 slash = SlashCommand(bot, sync_commands=True)
 
+def load_cogs():
+    for filename in os.listdir("./cogs"):
+        if filename.endswith(".py"):
+            bot.load_extension(f"cogs.{filename[:-3]}")
+
 @bot.event
 async def on_ready():
     print ("Bot is ready")
 
 # TODO: add cogs
+@bot.command()
+async def load(ctx, extension: str):
+    bot.load_extension(f"cogs.{extension}")
+
+    await ctx.send(f"Successfully loaded {extension}")
+
+@bot.command()
+async def unload(ctx, extension: str):
+    bot.unload_extension(f"cogs.{extension}")
+
+    await ctx.send(f"Successfully unloaded {extension}")
+
+@bot.command()
+async def reload(ctx, extension: str):
+    bot.unload_extension(f"cogs.{extension}")
+    bot.load_extension(f"cogs.{extension}")
+
+    await ctx.send(f"Successfully reloaded {extension}")
 
 @slash.slash(name="listwug", description="Lists all the plurals of a wug")
 async def listwug(ctx: SlashContext):
-    print(WugCache.wc["wug_plurals"])
     await ctx.send(str(WugCache.wc["wug_plurals"]))
 
 @slash.slash(name="twowug", description="Here is a wag, ")
@@ -88,4 +113,6 @@ async def dbg_wug_add(ctx: SlashContext, wugname: str):
             await ctx.send(f"```\n{str(e)}\n```")
 
 if __name__ == "__main__":
+    load_cogs()
+
     bot.run(get_bot_key())
