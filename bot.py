@@ -17,15 +17,6 @@ def get_bot_key() -> str:
     with open("api.key", "r") as f:
         return f.read().rstrip("\n")
 
-def space(lis: List[str]):
-    accum: str = ""
-    
-    for i in lis: accum += i + ' '
-    
-    accum = accum[:-1]
-
-    return accum
-
 bot = commands.Bot(command_prefix="!")
 slash = SlashCommand(bot, sync_commands=True)
 
@@ -67,14 +58,7 @@ async def listwug(ctx: SlashContext):
 async def twowug(ctx: SlashContext):
     wc = WugCache.wc
 
-    await ctx.send(space([
-        wc["before_plural"]["default"],
-
-        random.choice(wc["wug_plurals"])
-
-    ]) +
-        random.choice(wc["after_plural"])
-    )
+    await ctx.send(f"{wc['before_plural']['default']} {random.choice(wc['wug_plurals'])}{random.choice(wc['after_plural'])}")
 
 @wccmd
 @slash.slash(name="wug", description="Here is a wug, ")
@@ -82,24 +66,9 @@ async def wug(ctx: SlashContext):
     wc = WugCache.wc
 
     random_collective = random.choice(wc["before_plural"]["collective"])
+    indef_art = "an" if random_collective[0] in list("aeiou") else "a"
 
-    await ctx.send(space([
-        # before phrase, between default or randomly selected collective noun
-        space([
-            "Now there is",
-            "an" if random_collective[0] in list("aeiou") else "a",
-            random_collective,
-            "of"
-        ]),
-
-        # picks a random plural
-        random.choice(wc["wug_plurals"])
-
-    ]) +
-        # picks a random after-phrase
-        # TODO: afterplural eithermore options and random bool check or make it constant
-        random.choice(wc["after_plural"])
-    )
+    await ctx.send(f"Now there is {indef_art} {random_collective} of {random.choice(wc['wug_plurals'])}{random.choice(wc['after_plural'])}")
 
 if __name__ == "__main__":
     load_cogs()
