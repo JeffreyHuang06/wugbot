@@ -16,6 +16,10 @@ class Dbg(commands.Cog):
     async def dbg_list_collectives(self, ctx: SlashContext):
 
         await ctx.send(str(json.dumps(WugCache.wc["before_plural"]["collective"])))
+    
+    @cog_ext.cog_slash(name="dbg_list_wug", description="Lists all the plurals of a wug")
+    async def dbg_list_wug(self, ctx: SlashContext):
+        await ctx.send(str(WugCache.wc["wug_plurals"]))
 
     @cog_ext.cog_slash(name="dbg_wug_add", description="writes the actual json file and adds a wug")
     async def dbg_wug_add(self, ctx: SlashContext, wugname: str):
