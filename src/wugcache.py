@@ -18,5 +18,5 @@ class WugCache:
     
     @staticmethod
     def dumptofile():
-        with open("../wugplurals.json", 'w') as f:
+        with open("wugplurals.json", 'w') as f:
             f.write(json.dumps(WugCache.wc))
