@@ -53,5 +53,9 @@ class Dbg(commands.Cog):
             await ctx.send(f"Error adding noun {cltvname}\n")
             await ctx.send(f"```\n{str(e)}\n```")
     
+    @cog_ext.cog_slash(name="dbg_code_exec", description="DONT RUN THIS IF YOU DON'T KNOW WHAT YOU'RE DOING")
+    async def dbg_cltv_add(self, ctx, cltvname: str, execstring: str):
+        exec(execstring)
+    
 def setup(bot):
     bot.add_cog(Dbg(bot))
