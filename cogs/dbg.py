@@ -26,14 +26,32 @@ class Dbg(commands.Cog):
 
         WugCache.wc["wug_plurals"].append(wugname)
 
-        with open("wugplurals.json", 'w') as f:
-            try:
-                f.write(json.dumps(WugCache.wc))
-                await ctx.send(f"Successfully added {wugname}")
+        try:
+            WugCache.dumptofile()
+            await ctx.send(f"Successfully added {wugname}")
 
-            except Exception as e:
-                await ctx.send(f"Error adding wug {wugname}\n")
-                await ctx.send(f"```\n{str(e)}\n```")
+        except Exception as e:
+            await ctx.send(f"Error adding wug {wugname}\n")
+            await ctx.send(f"```\n{str(e)}\n```")
+    
+    @cog_ext.cog_slash(name="dbg_cltv_add", description="writes the actual json and adds a collective noun")
+    async def dbg_cltv_add(self, ctx, cltvname: str):
+        
+        # check if already in there
+        if cltvname in WugCache.wc["before_plural"]["collective"]:
+            await ctx.send(f"{cltvname} already in list")
+            return
+        
+        WugCache.wc["before_plural"]["collective"].append(cltvname)
+        WugCache.wc["before_plural"]["collective"].sort()
+
+        try:
+            WugCache.dumptofile()
+            await ctx.send(f"Successfully added {cltvname}")
+
+        except Exception as e:
+            await ctx.send(f"Error adding noun {cltvname}\n")
+            await ctx.send(f"```\n{str(e)}\n```")
     
 def setup(bot):
     bot.add_cog(Dbg(bot))
